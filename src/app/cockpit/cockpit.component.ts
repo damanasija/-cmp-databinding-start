@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-cockpit',
@@ -10,27 +10,29 @@ export class CockpitComponent implements OnInit {
   @Output('bpCreated') blueprintCreated = new EventEmitter<{type: string, name: string, content: string}>();
   //bpCreated is alias for other components who want to listen to this emitted event. they just need to bind to this alias name
   
-  newServerName = '';
-  newServerContent = '';
+  // newServerName = '';
+  // newServerContent = '';
+  @ViewChild('serverContentInput') serverContentInput: ElementRef;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  onAddServer() {
+  onAddServer(serverName: HTMLInputElement) {
+    // console.log(this.serverContentInput.nativeElement.value);
     this.serverCreated.emit({
       type: 'server',
-      name: this.newServerName,
-      content: this.newServerContent
+      name: serverName.value,
+      content: this.serverContentInput.nativeElement.value
     });
   }
 
-  onAddBlueprint() {
+  onAddBlueprint(serverName: HTMLInputElement) {
     this.blueprintCreated.emit({
-      type: 'blueprint',      
-      name: this.newServerName,
-      content: this.newServerContent
+      type: 'blueprint',
+      name: serverName.value,
+      content: this.serverContentInput.nativeElement.value
     });
   }
 }
